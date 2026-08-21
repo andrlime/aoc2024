@@ -1,0 +1,35 @@
+#include <advent24/example/ExampleSolution.hpp>
+#include <advent24/Solver.hpp>
+
+namespace aoc {
+
+namespace {
+
+template <Solution M> std::unique_ptr<SolverInterface>
+try_solver(const Config& cfg) {
+    if (cfg.solution_id != M::NAME) {
+        return nullptr;
+    }
+    return std::make_unique<Solver<M>>();
+}
+
+template <Solution... Ms> std::unique_ptr<SolverInterface>
+get_solver(const Config& cfg) {
+    std::unique_ptr<SolverInterface> result;
+    ((result = result ? std::move(result) : try_solver<Ms>(cfg)), ...);
+    return result;
+}
+
+} // namespace
+
+std::unique_ptr<SolverInterface> SolverInterface::of_cfg(const Config& cfg) {
+    auto solver = get_solver<solutions::Example>(cfg);
+    if (!solver) {
+        throw std::runtime_error(
+            std::format("no solution matching id '{}'", cfg.solution_id)
+        );
+    }
+    return solver;
+}
+
+} // namespace aoc
