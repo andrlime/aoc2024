@@ -1,0 +1,48 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+
+  init:
+    cmds:
+      - cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    aliases:
+      - i
+
+  build:
+    dir: "./build"
+    cmds:
+      - cmake ..
+      - make
+    aliases:
+      - b
+  
+  clean:
+    cmds:
+      - rm -rf build
+
+  run:
+    cmds:
+      - task: build
+      - ./build/aoc
+    aliases:
+      - r
+
+  lint:
+    cmds:
+      - find src/ -name '*.cc' | xargs clang-tidy -p build
+      - clang-format --dry-run --Werror --style=file $(find src/ -name '*.cc' -o -name '*.hpp')
+    aliases:
+      - l
+
+  format:
+    cmds:
+      - clang-format -i --style=file $(find src/ -name '*.cc' -o -name '*.hpp')
+    aliases:
+      - f
+
+  precommit:
+    cmds:
+      - task: lint
+      - task: format
