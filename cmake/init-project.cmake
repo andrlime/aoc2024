@@ -1,8 +1,4 @@
-file(GLOB junelib_SOURCES "junelib/*.cc")
-
-add_library(junelib STATIC ${junelib_SOURCES})
-target_include_directories(junelib PUBLIC ${CMAKE_SOURCE_DIR})
-target_compile_features(junelib PUBLIC cxx_std_${CMAKE_CXX_STANDARD})
+include("junelib/junelib.cmake")
 
 file(GLOB_RECURSE aoc_SOURCES "advent24/*.cc")
 
