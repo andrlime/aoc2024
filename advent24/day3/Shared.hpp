@@ -10,25 +10,21 @@ namespace aoc::solutions::day3 {
 
 enum class ParserType : uint8_t { Default, CheckDoDont };
 
-class MultiplicationInstruction {
-public:
-    MultiplicationInstruction(int l, int r) : left_(l), right_(r) {}
+struct MultiplicationInstruction {
+    int left;
+    int right;
 
-    int interp() const { return left_ * right_; }
-
-private:
-    int left_;
-    int right_;
+    int interp() const { return left * right; }
 };
 
 using InstructionsList = std::vector<MultiplicationInstruction>;
 
 class Parser {
 public:
-    explicit Parser(const std::string& s) : program_(s), len_(s.length()) {}
+    explicit Parser(const std::string& s) : program_(s) {}
 
     void parse(ParserType t) {
-        while (pc_ < len_) {
+        while (pc_ < program_.length()) {
             const char opcode = program_[pc_];
             switch (opcode) {
                 case 'm':
@@ -160,7 +156,6 @@ private:
     std::string program_;
     bool is_enabled_{true};
     size_t pc_{0};
-    size_t len_;
 };
 
 } // namespace aoc::solutions::day3
