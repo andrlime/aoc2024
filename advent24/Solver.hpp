@@ -21,17 +21,13 @@
 namespace aoc {
 
 template <typename S>
-concept Solution = requires(
-    InputType input_type, const std::string& input, typename S::t value
-) {
+concept Solution = requires(const std::string& input, typename S::t value) {
     typename S::t;
 
     { S::NAME } -> std::convertible_to<std::string>;
     { S::LABEL } -> std::convertible_to<std::string>;
+    { S::INPUTS } -> std::convertible_to<InputListType>;
 
-    {
-        S::get_input_path(input_type)
-    } -> std::same_as<std::optional<std::string>>;
     { S::parse_input(input) } -> std::same_as<typename S::t>;
     { S::solve(value) } -> std::convertible_to<std::string>;
 };
@@ -47,7 +43,8 @@ struct SolverInterface : june::Noncopyable {
 
 template <Solution M> struct Solver final : public SolverInterface {
     std::string get_solution_string(InputType input_type) override {
-        const std::optional<std::string> path = M::get_input_path(input_type);
+        const std::optional<std::string_view>& path =
+            M::INPUTS.at(std::to_underlying(input_type));
         if (!path) {
             throw std::runtime_error(
                 std::format(

@@ -8,11 +8,7 @@
 
 namespace aoc::solutions::day2 {
 
-enum class SequenceType : uint8_t {
-    Uninitialised,
-    Increasing,
-    Decreasing
-};
+enum class SequenceType : uint8_t { Uninitialised, Increasing, Decreasing };
 
 struct NumberSequence {
     using t = std::vector<int>;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <optional>
 #include <string>
 
 #include <advent24/Config.hpp>
@@ -14,15 +13,9 @@ struct Part1 {
 
     static constexpr std::string NAME = "4a";
     static constexpr std::string LABEL = "Day 4, Part 1";
-
-    static std::optional<std::string> get_input_path(InputType input_type) {
-        switch (input_type) {
-            case InputType::Small: return "day4/small.txt";
-            case InputType::Large: return "day4/large.txt";
-            case InputType::Testing: return std::nullopt;
-        }
-        std::unreachable();
-    }
+    static constexpr InputListType INPUTS = {
+        {"day4/small.txt", "day4/large.txt"}
+    };
 
     static auto parse_input(const std::string& s) -> t {
         auto lines = june::strings::split(s, '\n');

@@ -1,10 +1,8 @@
 #pragma once
 
 #include <numeric>
-#include <optional>
 #include <ranges>
 #include <string>
-#include <utility>
 
 #include <advent24/Config.hpp>
 #include <advent24/day1/Shared.hpp>
@@ -17,15 +15,9 @@ struct Part2 {
 
     static constexpr std::string NAME = "1b";
     static constexpr std::string LABEL = "Day 1, Part 2";
-
-    static std::optional<std::string> get_input_path(InputType input_type) {
-        switch (input_type) {
-            case InputType::Small: return "day1/small.txt";
-            case InputType::Large: return "day1/large.txt";
-            case InputType::Testing: return std::nullopt;
-        }
-        std::unreachable();
-    }
+    static constexpr InputListType INPUTS = {
+        {"day1/small.txt", "day1/large.txt"}
+    };
 
     static auto parse_input(const std::string& s) -> t {
         auto lines = june::strings::split(s, '\n');
