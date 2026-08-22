@@ -1,7 +1,6 @@
 #pragma once
 
 #include <concepts>
-#include <cstdint>
 #include <filesystem>
 #include <format>
 #include <memory>
@@ -16,6 +15,7 @@
 #include <junelib/FileReader.hpp>
 #include <junelib/MemoryUtil.hpp>
 #include <junelib/StringUtil.hpp>
+#include <junelib/Timedelta.hpp>
 #include <junelib/Timing.hpp>
 
 namespace aoc {
@@ -63,9 +63,7 @@ template <Solution M> struct Solver final : public SolverInterface {
     }
 
     void time_and_solve(InputType input_type) override {
-        static constexpr uint64_t US_PER_MS = 1000;
-
-        auto [result, duration_ms] =
+        auto [result, duration] =
             june::ChronoTimer::time_function([this, input_type] {
                 return get_solution_string(input_type);
             });
@@ -73,13 +71,16 @@ template <Solution M> struct Solver final : public SolverInterface {
         std::println("{}", M::LABEL);
         std::println("Solution: {}", result);
 
-        if (duration_ms < 1.0) {
+        if (duration.to_ms() < 1.0) {
             std::println(
-                "Time: {} ms ({} μs)", duration_ms, duration_ms * US_PER_MS
+                "Time: {} ms ({} μs)", duration.to_ms(), duration.to_us()
             );
         }
+        else if (duration.to_s() < 1.0) {
+            std::println("Time: {} ms", duration.to_ms());
+        }
         else {
-            std::println("Time: {} ms", duration_ms);
+            std::println("Time: {} s", duration.to_s());
         }
     }
 };

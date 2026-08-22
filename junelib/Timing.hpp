@@ -2,23 +2,22 @@
 
 #include <chrono>
 #include <concepts>
-#include <ratio>
 #include <type_traits>
 #include <utility>
+
+#include <junelib/Timedelta.hpp>
 
 namespace june {
 
 template <typename T> struct TimingResult {
     T value;
-    double duration;
+    Timedelta duration;
 };
 
 struct ChronoTimer {
     ChronoTimer() = delete;
 
-    template <typename Units = std::milli, typename F>
-    requires std::invocable<F>
-             && std::same_as<Units, std::ratio<Units::num, Units::den>>
+    template <typename F> requires std::invocable<F>
     static auto time_function(F&& f) {
         using Result = std::invoke_result_t<F>;
 
@@ -26,8 +25,9 @@ struct ChronoTimer {
         Result value = std::forward<F>(f)();
         auto end = std::chrono::high_resolution_clock::now();
 
-        double duration =
-            std::chrono::duration<double, Units>(end - start).count();
+        Timedelta duration = Timedelta::of_ns(
+            std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+        );
         return TimingResult<Result>{std::move(value), duration};
     }
 };
