@@ -6,6 +6,8 @@
 #include <advent24/day3/PartTwo.hpp>
 #include <advent24/day4/PartOne.hpp>
 #include <advent24/day4/PartTwo.hpp>
+#include <advent24/day5/PartOne.hpp>
+#include <advent24/day5/PartTwo.hpp>
 #include <advent24/example/ExampleSolution.hpp>
 #include <advent24/Solver.hpp>
 
@@ -31,12 +33,11 @@ get_solver(const Config& cfg) {
 } // namespace
 
 std::unique_ptr<SolverInterface> SolverInterface::of_cfg(const Config& cfg) {
+    using namespace solutions;
     auto solver = get_solver<
-        solutions::Example, solutions::day1::Part1, solutions::day1::Part2,
-        solutions::day2::Part1, solutions::day2::Part2, solutions::day3::Part1,
-        solutions::day3::Part2, solutions::day4::Part1, solutions::day4::Part2>(
-        cfg
-    );
+        Example, day1::Part1, day1::Part2, day2::Part1, day2::Part2,
+        day3::Part1, day3::Part2, day4::Part1, day4::Part2, day5::Part1,
+        day5::Part2>(cfg);
     if (!solver) {
         throw std::runtime_error(
             std::format("no solution matching id '{}'", cfg.solution_id)
